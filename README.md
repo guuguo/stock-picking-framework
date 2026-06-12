@@ -15,7 +15,7 @@ npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-p
 ```
 帮我安装 stock-picking-framework 炒股技能，执行以下三步：
 1. npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-picking-framework
-2. pip install --no-cache-dir pandas numpy mootdx requests stockstats
+2. python3 -m pip install --no-cache-dir pandas numpy mootdx requests stockstats
 3. bash ~/.agents/skills/stock-picking-framework/init.sh
 安装完告诉我结果。
 ```
