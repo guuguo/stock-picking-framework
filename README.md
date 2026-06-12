@@ -2,93 +2,109 @@
 
 A 股价值投资选股框架 — 基于 `新质生产力主线 + 基本面底座 + 预期差 + 最新资料 + 催化时间` 五维决策体系。
 
-## 安装
+## Agent 安装指令
 
-### 1. 安装为 AI Agent 技能
+> 将以下内容发给你的 AI Agent（Qoder / Claude Code / Codex），即可自动完成安装：
+
+```
+帮我安装 stock-picking-framework 炒股技能。按以下步骤执行：
+
+1. 克隆仓库并链接为全局技能：
+   git clone https://github.com/guuguo/stock-picking-framework.git /tmp/stock-picking-framework
+   mkdir -p ~/.agents/skills
+   ln -sfn /tmp/stock-picking-framework ~/.agents/skills/stock-picking-framework
+
+2. 安装 Python 依赖：
+   pip install pandas numpy mootdx requests stockstats
+
+3. 安装依赖的 a-stock-data 数据技能：
+   mkdir -p ~/.agents/skills/a-stock-data
+   curl -fsSL -o ~/.agents/skills/a-stock-data/SKILL.md https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md
+
+4. 初始化 STOCK_ROOT（使用当前目录作为炒股项目目录）：
+   mkdir -p ~/.config/stock-picking
+   echo "{\"stock_root\": \"$(pwd)\"}" > ~/.config/stock-picking/config.json
+   mkdir -p monitor cases data research snapshots
+   [ ! -f monitor/holdings.json ] && echo '{"positions": []}' > monitor/holdings.json
+   [ ! -f monitor/nav_history.json ] && echo '{"entries": []}' > monitor/nav_history.json
+   [ ! -f daily_playbook.md ] && printf '# Daily Playbook\n\n## 今日计划\n\n- [ ] 检查持仓标的公告\n- [ ] 检查宏观事件日历\n' > daily_playbook.md
+
+5. 验证安装：
+   ls ~/.agents/skills/stock-picking-framework/SKILL.md && echo "✅ 技能已安装"
+   cat ~/.config/stock-picking/config.json && echo "✅ STOCK_ROOT 已配置"
+
+安装完成后重启对话即可使用。
+```
+
+## 手动安装
+
+如果不想通过 Agent，也可以手动执行：
 
 ```bash
-# 克隆仓库
+# 1. 克隆 + 链接
 git clone https://github.com/guuguo/stock-picking-framework.git
-
-# 链接到全局技能目录
 mkdir -p ~/.agents/skills
-ln -s "$(pwd)/stock-picking-framework" ~/.agents/skills/stock-picking-framework
-```
+ln -sfn "$(pwd)/stock-picking-framework" ~/.agents/skills/stock-picking-framework
 
-> Qoder / Claude Code 用户：安装后重启对话即可自动识别。
+# 2. Python 依赖
+pip install pandas numpy mootdx requests stockstats
 
-### 2. 运行初始化
-
-```bash
-cd stock-picking-framework
-bash init.sh
-```
-
-初始化脚本会：
-- 询问 STOCK_ROOT 位置（当前目录 或 `~/.stock/`）
-- 写入全局配置 `~/.config/stock-picking/config.json`
-- 在 STOCK_ROOT 下创建目录结构（monitor/ cases/ data/ research/ snapshots/）
-- 创建空模板文件
-
-### 3. 安装 Python 依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. 安装外部数据技能（必需）
-
-本技能依赖 `a-stock-data` 提供 A 股行情、研报、资金等数据：
-
-```bash
-# 安装 a-stock-data 技能
+# 3. a-stock-data 数据技能
 mkdir -p ~/.agents/skills/a-stock-data
-curl -o ~/.agents/skills/a-stock-data/SKILL.md \
+curl -fsSL -o ~/.agents/skills/a-stock-data/SKILL.md \
   https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md
+
+# 4. 初始化（交互式）
+cd stock-picking-framework && bash init.sh
 ```
 
-来源：[github.com/simonlin1212/a-stock-data](https://github.com/simonlin1212/a-stock-data)
+## 使用方式
 
-## 使用
+安装后在炒股项目目录启动 AI 对话，技能自动工作：
 
-安装后在任意炒股项目目录启动 AI 对话，技能会自动：
+| 你说的话 | 技能自动做的事 |
+|---------|--------------|
+| "分析一下 601138" | 拉数据 → 8 维研究 → 评分 → 写入 `research/601138_fii/` |
+| "我总资产 52 万，现金 3 万" | 自动记账 → 对比沪深300/创业板/科创50 基准 |
+| "工业富联该加仓吗" | 加载决策规则 → FCEM 估值 → 仓位建议 |
+| "今天有什么宏观事件" | 加载宏观事件日历 → L1-L4 分级提醒 |
+| "复盘一下最近的错误" | 加载 `cases/*.md` 历史案例 |
 
-1. **发现 STOCK_ROOT** — 通过项目特征文件或全局配置定位
-2. **按需加载参考文档** — 根据场景自动加载决策规则、研究框架等
-3. **执行研究/决策** — 深度研究输出写入 `research/<ticker>/`，cases 自动维护
-4. **记账跟踪** — 报告总资产时自动记录净值、对比基准
+## STOCK_ROOT 发现逻辑
+
+技能通过以下优先级定位你的炒股项目目录：
+
+1. 当前目录含 `monitor/holdings.json` 或 `daily_playbook.md` → 当前目录
+2. `~/.config/stock-picking/config.json` 中的 `stock_root` 字段
+3. 均不存在 → 询问你选当前目录还是 `~/.stock/`
 
 ## 目录结构
 
 ```
-stock-picking-framework/          # 技能仓库
-├── SKILL.md                      # 技能主文件
-├── references/                   # 8 份按需加载参考文档
-├── scripts/                      # Python 脚本（数据抓取/记账/看板）
-├── init.sh                       # 初始化脚本
-└── ...
-
-STOCK_ROOT/                       # 运行时数据目录（init.sh 创建）
-├── monitor/                      # 持仓/净值/业绩台账
-├── cases/                        # 复盘案例（自动维护）
-├── data/                         # 数据产物
-├── research/                     # 深度研究输出
-├── snapshots/                    # 持仓快照
-└── daily_playbook.md             # 每日计划
+技能仓库 (stock-picking-framework/)    STOCK_ROOT (你的炒股项目/)
+├── SKILL.md                           ├── monitor/
+├── references/ (8 份决策文档)          │   ├── holdings.json
+├── scripts/ (数据/记账/看板)           │   ├── nav_history.json
+├── init.sh                            │   └── performance_ledger.md
+├── requirements.txt                   ├── cases/ (复盘案例，自动维护)
+└── LICENSE                            ├── data/
+                                       ├── research/ (深度研究输出)
+                                       ├── snapshots/
+                                       └── daily_playbook.md
 ```
 
 ## 核心功能
 
-- **5 原则决策框架** — 证据 / 概率 / 对称 / 期望收益 / 约束
+- **5 原则决策** — 证据 / 概率 / 对称 / 期望收益 / 约束
 - **8 维深度研究** — 主线 / 基本面 / 预期差 / 资料 / 催化 / 估值 / 弹性 / 风险
 - **FCEM 四源估值** — 量价利 / TAM / 历史 / 同行交叉验证
 - **集中仓位管理** — 5±1 只持仓、核心 25%/普通 12%/试错 4%
 - **移动止盈体系** — 让赢家跑、保本止盈、趋势破位
 - **自动记账** — 净值跟踪 vs 沪深300/创业板/科创50 基准
 
-## 配置
+## 自定义
 
-编辑 `scripts/stocks_config.json` 配置你的关注股票和同行对标：
+编辑技能目录下的 `scripts/stocks_config.json` 配置关注股票：
 
 ```json
 {
