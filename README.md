@@ -2,60 +2,22 @@
 
 A 股价值投资选股框架 — 基于 `新质生产力主线 + 基本面底座 + 预期差 + 最新资料 + 催化时间` 五维决策体系。
 
-## Agent 安装指令
-
-> 将以下内容发给你的 AI Agent（Qoder / Claude Code / Codex），即可自动完成安装：
-
-```
-帮我安装 stock-picking-framework 炒股技能。按以下步骤执行：
-
-1. 克隆仓库并链接为全局技能：
-   git clone https://github.com/guuguo/stock-picking-framework.git /tmp/stock-picking-framework
-   mkdir -p ~/.agents/skills
-   ln -sfn /tmp/stock-picking-framework ~/.agents/skills/stock-picking-framework
-
-2. 安装 Python 依赖：
-   pip install pandas numpy mootdx requests stockstats
-
-3. 安装依赖的 a-stock-data 数据技能：
-   mkdir -p ~/.agents/skills/a-stock-data
-   curl -fsSL -o ~/.agents/skills/a-stock-data/SKILL.md https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md
-
-4. 初始化 STOCK_ROOT（使用当前目录作为炒股项目目录）：
-   mkdir -p ~/.config/stock-picking
-   echo "{\"stock_root\": \"$(pwd)\"}" > ~/.config/stock-picking/config.json
-   mkdir -p monitor cases data research snapshots
-   [ ! -f monitor/holdings.json ] && echo '{"positions": []}' > monitor/holdings.json
-   [ ! -f monitor/nav_history.json ] && echo '{"entries": []}' > monitor/nav_history.json
-   [ ! -f daily_playbook.md ] && printf '# Daily Playbook\n\n## 今日计划\n\n- [ ] 检查持仓标的公告\n- [ ] 检查宏观事件日历\n' > daily_playbook.md
-
-5. 验证安装：
-   ls ~/.agents/skills/stock-picking-framework/SKILL.md && echo "✅ 技能已安装"
-   cat ~/.config/stock-picking/config.json && echo "✅ STOCK_ROOT 已配置"
-
-安装完成后重启对话即可使用。
-```
-
-## 手动安装
-
-如果不想通过 Agent，也可以手动执行：
+## 安装
 
 ```bash
-# 1. 克隆 + 链接
-git clone https://github.com/guuguo/stock-picking-framework.git
-mkdir -p ~/.agents/skills
-ln -sfn "$(pwd)/stock-picking-framework" ~/.agents/skills/stock-picking-framework
+npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-picking-framework
+```
 
-# 2. Python 依赖
+安装 Python 依赖（可选，用于数据抓取和记账脚本）：
+
+```bash
 pip install pandas numpy mootdx requests stockstats
+```
 
-# 3. a-stock-data 数据技能
-mkdir -p ~/.agents/skills/a-stock-data
-curl -fsSL -o ~/.agents/skills/a-stock-data/SKILL.md \
-  https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md
+首次使用时运行初始化（设置炒股项目目录）：
 
-# 4. 初始化（交互式）
-cd stock-picking-framework && bash init.sh
+```bash
+bash ~/.agents/skills/stock-picking-framework/init.sh
 ```
 
 ## 使用方式
