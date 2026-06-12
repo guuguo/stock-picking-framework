@@ -10,17 +10,17 @@ npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-p
 
 ### 一键安装（Agent 友好）
 
-> 复制下面这段发给 Agent，自动帮你装好全部依赖并初始化：
+> 复制下面这段发给 Agent，自动帮你装好并初始化：
 
 ```
-帮我安装 stock-picking-framework 炒股技能，执行以下三步：
+帮我安装 stock-picking-framework 炒股技能，执行以下两步：
 1. npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-picking-framework
-2. python3 -m pip install --no-cache-dir pandas numpy mootdx requests stockstats
-3. bash ~/.agents/skills/stock-picking-framework/init.sh
+2. bash ~/.agents/skills/stock-picking-framework/init.sh
 安装完告诉我结果。
 ```
 
-> 也可以手动分步执行上面三行命令。
+> 也可以手动分步执行。脚本仅使用 Python 标准库，无需额外 pip 依赖。
+> 数据抓取由 [a-stock-data](https://github.com/simonlin1212/a-stock-data) 技能提供，建议一并安装。
 
 ## 使用方式
 
@@ -48,10 +48,10 @@ npx skills add https://github.com/guuguo/stock-picking-framework --skill stock-p
 技能仓库 (stock-picking-framework/)    STOCK_ROOT (你的炒股项目/)
 ├── SKILL.md                           ├── monitor/
 ├── references/ (8 份决策文档)          │   ├── holdings.json
-├── scripts/ (数据/记账/看板)           │   ├── nav_history.json
+├── scripts/ (记账/看板)               │   ├── nav_history.json
 ├── init.sh                            │   └── performance_ledger.md
-├── requirements.txt                   ├── cases/ (复盘案例，自动维护)
-└── LICENSE                            ├── data/
+└── LICENSE                            ├── cases/ (复盘案例，自动维护)
+                                       ├── data/
                                        ├── research/ (深度研究输出)
                                        ├── snapshots/
                                        └── daily_playbook.md
