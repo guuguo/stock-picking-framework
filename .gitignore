@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Runtime cache
+.cache/
+*.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Personal data (never commit)
+monitor/holdings.json
+monitor/nav_history.json
+monitor/performance_ledger.md
+data/
+research/
+snapshots/
+cases/
+daily_playbook.md
