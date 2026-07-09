@@ -1,0 +1,4 @@
+interface:
+  display_name: "缠论分析"
+  short_description: "以缠论框架研判走势结构与买卖点"
+  default_prompt: "Use $chanlun-analysis to analyze this symbol with Chanlun structure, levels, divergence, and buy/sell point discipline."
