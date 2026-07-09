@@ -52,18 +52,21 @@ K 线结构分析框架：笔、中枢、背驰、买卖点。
 ### 最简单方式（推荐）
 
 ```bash
-# 1. 克隆到技能源目录
+# 1. 克隆
 git clone https://github.com/guuguo/stock-skills.git \
   ~/.agents/sources/skills/stock-skills
 
-# 2. 一行创建 symlink（Claude Code / ZCode / Codex 通用）
-for skill in stock-picking-framework chanlun-analysis; do
-  ln -sf "$HOME/.agents/sources/skills/stock-skills/skills/$skill" \
-         "$HOME/.agents/skills/$skill"
-done
+# 2. 运行安装脚本（自动检测本地编辑器 + 交互选择 + 创建 symlink）
+bash ~/.agents/sources/skills/stock-skills/install.sh
 ```
 
-> `~/.claude/skills/` 和 `~/.zcode/skills/` 已有 symlink → `~/.agents/skills/`，无需额外操作。
+脚本会：
+- 🔍 自动扫描本地已安装的 AI 编辑器（Claude Code / ZCode / Codex / OpenCode / Antigravity / Qoderwork / Hermes）
+- 📋 展示检测结果，询问安装到哪些编辑器
+- 🔗 创建 symlink，统一桥接到 `.agents/skills/`
+- ✅ 输出安装状态矩阵
+
+> 支持的编辑器: Claude Code、ZCode、Codex、OpenCode、Gemini Antigravity、Qoderwork、Hermes
 
 ### 依赖
 
