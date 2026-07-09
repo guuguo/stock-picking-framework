@@ -170,5 +170,18 @@ foreach ($c in $consumers) {
   Write-Host $line
 }
 
+# ── 软依赖检查 ──────────────────────────────────
+$dataSkill = "$env:USERPROFILE\.agents\skills\a-stock-data\SKILL.md"
+if (Test-Path $dataSkill) {
+  Write-Host ""
+  Write-Host "✅ a-stock-data 已安装（深度研究/财务数据可用）" -ForegroundColor Green
+} else {
+  Write-Host ""
+  Write-Host "⚠️  未检测到 a-stock-data 技能" -ForegroundColor Yellow
+  Write-Host "   「深度研究」和财务数据拉取功能依赖它。"
+  Write-Host "   安装: irm https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md | Out-File -Encoding UTF8 $env:USERPROFILE\.agents\skills\a-stock-data\SKILL.md"
+  Write-Host "   详情: https://github.com/simonlin1212/a-stock-data"
+}
+
 Write-Host ""
 Write-Host "💡 对话中说「盯盘」「缠论」「深度研究」即可激活" -ForegroundColor Yellow

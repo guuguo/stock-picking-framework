@@ -68,6 +68,14 @@ K 线结构分析框架：笔、中枢、背驰、买卖点。
 pip install requests pandas stockstats
 ```
 
+### 软依赖（推荐）
+
+| 技能 | 用途 | 安装 |
+|------|------|------|
+| [a-stock-data](https://github.com/simonlin1212/a-stock-data) | 实时行情、财务数据、公告研报 | `curl -o ~/.agents/skills/a-stock-data/SKILL.md https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md` |
+
+> 不装 a-stock-data 也能用盯盘和缠论分析，但「深度研究」和财务数据拉取需要它。安装脚本会自动检测并提示。
+
 ---
 
 ## 文件结构

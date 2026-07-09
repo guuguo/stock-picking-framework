@@ -159,4 +159,18 @@ for entry in "${CONSUMERS[@]}"; do
   echo ""
 done
 echo ""
+
+# ── 软依赖检查 ──────────────────────────────────
+DATA_SKILL="$HOME/.agents/skills/a-stock-data/SKILL.md"
+if [ -f "$DATA_SKILL" ]; then
+  echo "✅ a-stock-data 已安装（深度研究/财务数据可用）"
+else
+  echo "⚠️  未检测到 a-stock-data 技能"
+  echo "   「深度研究」和财务数据拉取功能依赖它。"
+  echo "   安装: curl -o ~/.agents/skills/a-stock-data/SKILL.md \\"
+  echo "          https://raw.githubusercontent.com/simonlin1212/a-stock-data/main/SKILL.md"
+  echo "   详情: https://github.com/simonlin1212/a-stock-data"
+fi
+
+echo ""
 echo "💡 对话中说「盯盘」或「缠论」即可激活技能"
