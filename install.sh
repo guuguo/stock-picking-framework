@@ -14,6 +14,17 @@ SKILLS="stock-picking-framework chanlun-analysis"
 CANONICAL="$REPO_DIR/skills"
 
 # ── Clone / Pull ──────────────────────────────────
+
+# 环境检查
+if [ -z "${HOME:-}" ]; then
+  echo "❌ 未检测到 \$HOME 环境变量，无法继续。"
+  exit 1
+fi
+if ! command -v git &>/dev/null; then
+  echo "❌ 未检测到 git，请先安装: https://git-scm.com"
+  exit 1
+fi
+
 if [ -d "$REPO_DIR/.git" ]; then
   echo "📦 更新已有仓库..."
   git -C "$REPO_DIR" pull --ff-only 2>/dev/null || echo "   (跳过, 可能离线或有本地修改)"

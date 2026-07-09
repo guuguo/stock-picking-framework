@@ -12,6 +12,17 @@ $skills = @("stock-picking-framework", "chanlun-analysis")
 $canonical = "$repoDir\skills"
 
 # ── Clone / Pull ──────────────────────────────────
+
+# 环境检查
+if (-not $env:USERPROFILE) {
+  Write-Host "❌ 未检测到 USERPROFILE 环境变量，无法继续。" -ForegroundColor Red
+  exit 1
+}
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+  Write-Host "❌ 未检测到 git，请先安装: https://git-scm.com" -ForegroundColor Red
+  exit 1
+}
+
 if (Test-Path "$repoDir\.git") {
   Write-Host "📦 更新已有仓库..." -ForegroundColor Cyan
   try { git -C $repoDir pull --ff-only 2>$null } catch { Write-Host "   (跳过, 可能离线或有本地修改)" }
