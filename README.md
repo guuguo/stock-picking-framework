@@ -14,9 +14,9 @@ curl -fsSL https://raw.githubusercontent.com/guuguo/stock-picking-framework/main
 irm https://raw.githubusercontent.com/guuguo/stock-picking-framework/main/install.ps1 | iex
 ```
 
-脚本自动检测本地 AI 编辑器（Claude Code / ZCode / Codex / OpenCode / Antigravity / Qoderwork / Hermes），交互选择后创建 symlink。
+脚本自动完成：**clone 仓库 → 检测本地 AI 编辑器 → 交互选择 → 创建 symlink**。
 
-> Windows 用户也可在 Git Bash 中运行 bash 版本。PowerShell 版本如 symlink 失败，改用 junction 并提示管理员权限。
+**重复运行 = 自动更新**：再次执行会自动 `git pull` 拉取最新版本，然后刷新 symlink。
 
 ---
 

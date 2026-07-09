@@ -2,11 +2,27 @@
 set -euo pipefail
 
 # stock-skills 安装脚本
-# 自动检测本地 AI 编辑器 → 选择目标 → 创建 symlink
+# 自动 clone/pull + 检测本地 AI 编辑器 → 选择目标 → 创建 symlink
 # 兼容 bash 3.x+ (macOS / Linux)
+#
+# 一行安装/更新:
+#   curl -fsSL https://raw.githubusercontent.com/guuguo/stock-picking-framework/main/install.sh | bash
 
+REPO_URL="https://github.com/guuguo/stock-picking-framework.git"
+REPO_DIR="$HOME/.agents/sources/skills/stock-skills"
 SKILLS="stock-picking-framework chanlun-analysis"
-CANONICAL="$HOME/.agents/sources/skills/stock-skills/skills"
+CANONICAL="$REPO_DIR/skills"
+
+# ── Clone / Pull ──────────────────────────────────
+if [ -d "$REPO_DIR/.git" ]; then
+  echo "📦 更新已有仓库..."
+  git -C "$REPO_DIR" pull --ff-only 2>/dev/null || echo "   (跳过, 可能离线或有本地修改)"
+else
+  echo "📦 克隆仓库..."
+  mkdir -p "$(dirname "$REPO_DIR")"
+  git clone "$REPO_URL" "$REPO_DIR"
+fi
+echo ""
 
 # ── 编辑器检测 ──────────────────────────────────
 # 格式: "id|skills_path|marker_path"

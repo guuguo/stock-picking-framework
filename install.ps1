@@ -1,10 +1,26 @@
 # stock-skills Windows 安装脚本 (PowerShell)
-# 自动检测本地 AI 编辑器 → 选择目标 → 创建 symlink
+# 自动 clone/pull + 检测本地 AI 编辑器 → 选择目标 → 创建 symlink
+#
+# 一行安装/更新:
+#   irm https://raw.githubusercontent.com/guuguo/stock-picking-framework/main/install.ps1 | iex
 
 param([switch]$Yes)
 
+$repoUrl = "https://github.com/guuguo/stock-picking-framework.git"
+$repoDir = "$env:USERPROFILE\.agents\sources\skills\stock-skills"
 $skills = @("stock-picking-framework", "chanlun-analysis")
-$canonical = "$env:USERPROFILE\.agents\sources\skills\stock-skills\skills"
+$canonical = "$repoDir\skills"
+
+# ── Clone / Pull ──────────────────────────────────
+if (Test-Path "$repoDir\.git") {
+  Write-Host "📦 更新已有仓库..." -ForegroundColor Cyan
+  try { git -C $repoDir pull --ff-only 2>$null } catch { Write-Host "   (跳过, 可能离线或有本地修改)" }
+} else {
+  Write-Host "📦 克隆仓库..." -ForegroundColor Cyan
+  New-Item -ItemType Directory -Force -Path (Split-Path $repoDir) | Out-Null
+  git clone $repoUrl $repoDir
+}
+Write-Host ""
 
 # ── 编辑器检测 ──────────────────────────────────
 $consumers = @(
